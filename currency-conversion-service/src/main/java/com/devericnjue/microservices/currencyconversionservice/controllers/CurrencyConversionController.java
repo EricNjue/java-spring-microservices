@@ -23,7 +23,7 @@ public class CurrencyConversionController {
         this.currencyExchangeServiceProxy = currencyExchangeServiceProxy;
     }
 
-    // Using Raw RestTemaplate
+    // Using Raw RestTemplate
     @GetMapping("/raw/from/{from}/to/{to}/quantity/{quantity}")
     public ResponseEntity<CurrencyConversionResult> convertCurrency(@PathVariable String from, @PathVariable String to,
                                                                     @PathVariable BigDecimal quantity) {
