@@ -2,6 +2,7 @@ package com.devericnjue.microservices.currencyconversionservice.controllers;
 
 import com.devericnjue.microservices.currencyconversionservice.dto.CurrencyConversionResult;
 import com.devericnjue.microservices.currencyconversionservice.proxies.CurrencyExchangeServiceProxy;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("currency-converter")
+@Slf4j
 public class CurrencyConversionController {
 
     private CurrencyExchangeServiceProxy currencyExchangeServiceProxy;
@@ -48,12 +50,13 @@ public class CurrencyConversionController {
     // Using Feign ....
     @GetMapping("/feign/from/{from}/to/{to}/quantity/{quantity}")
     public ResponseEntity<CurrencyConversionResult> convertCurrencyFeign(@PathVariable String from, @PathVariable String to,
-                                                                    @PathVariable BigDecimal quantity) {
+                                                                         @PathVariable BigDecimal quantity) {
         CurrencyConversionResult response = currencyExchangeServiceProxy.getExchangeRate(from, to);
 
-        CurrencyConversionResult conversionResult=new CurrencyConversionResult(response.getId(), from, to,
+        CurrencyConversionResult conversionResult = new CurrencyConversionResult(response.getId(), from, to,
                 response.getConversionMultiple(), quantity, quantity.multiply(response.getConversionMultiple()),
                 response.getPort());
+        log.info("{}", response);
         return ResponseEntity.ok(conversionResult);
     }
 }

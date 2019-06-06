@@ -2,6 +2,7 @@ package com.devericnjue.microservices.currencyexchangeservice.controllers;
 
 import com.devericnjue.microservices.currencyexchangeservice.models.ExchangeValue;
 import com.devericnjue.microservices.currencyexchangeservice.repositories.CurrencyExchangeRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("currency-exchange")
+@Slf4j
 public class CurrencyExchangeController {
 
     @Autowired
@@ -26,6 +28,7 @@ public class CurrencyExchangeController {
     public ResponseEntity<ExchangeValue> getExchangeRate(@PathVariable String from, @PathVariable String to) {
         ExchangeValue exchangeValue = currencyExchangeRepository.findByFromAndTo(from, to);
         exchangeValue.setPort(Integer.parseInt(environment.getProperty("local.server.port")));
+        log.info("{}", exchangeValue);
         return ResponseEntity.ok(exchangeValue);
     }
 }
